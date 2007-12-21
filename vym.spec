@@ -9,6 +9,7 @@ Source0: 	http://prdownloads.sourceforge.net/vym/%{name}-%{version}.tar.bz2
 URL: 		http://www.insilmaril.de/vym/
 License: 	GPL
 Group: 		Office
+BuildRoot: 	%{_tmppath}/%{name}-buildroot
 Requires:	zip
 BuildRequires:	libqt-devel
 
