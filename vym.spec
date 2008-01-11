@@ -38,13 +38,9 @@ qmake -o Makefile vym.pro
 
 %install
 rm -rf $RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT/%_datadir/%name $RPM_BUILD_ROOT/%_bindir $RPM_BUILD_ROOT/%_menudir $RPM_BUILD_ROOT/%{_iconsdir}
 tar c scripts styles icons flags lang exports | tar x -C $RPM_BUILD_ROOT/%_datadir/%name
 mkdir docs; tar c demos | tar x -C ./docs/
 install vym $RPM_BUILD_ROOT/%_bindir/
-cat > $RPM_BUILD_ROOT/%_menudir/%name << EOF
-?package(vym): needs="x11" section="Office/Graphs" title="VYM" longtitle="View Your Mind" command="/usr/bin/vym" icon="vym.png" xdg="true"
-EOF
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
 cat << EOF > $RPM_BUILD_ROOT%{_datadir}/applications/mandriva-%{name}.desktop
 [DESKTOP ENTRY]
@@ -71,6 +67,5 @@ rm -rf $RPM_BUILD_ROOT
 %doc doc demos docs/*
 %_datadir/%name
 %_bindir/%name
-%_menudir/%name
 %{_datadir}/applications/mandriva-%name.desktop
 %{_iconsdir}/%name.png
