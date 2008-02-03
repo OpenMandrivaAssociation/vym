@@ -1,5 +1,5 @@
-%define version 1.8.1
-%define release %mkrel 2
+%define version 1.10.0
+%define release %mkrel 1
 
 Summary:	View Your Mind is a tool to manage mind maps
 Name: 		vym
@@ -7,11 +7,19 @@ Version: 	%version
 Release: 	%release
 Source0: 	http://prdownloads.sourceforge.net/vym/%{name}-%{version}.tar.bz2
 URL: 		http://www.insilmaril.de/vym/
+Patch0:         vym-1.10.0-dir-vars.patch
+Patch1:         vym-1.10.0-docdir-searchList.patch
+Patch2:         vym-1.10.0-xdg-open.patch
+Patch3:         vym-0.10.0-editxlinkdialog-typeinfo.patch
+Patch4:         vym-0.10.0-selection-typeinfo.patch
+Patch5:         vym-0.10.0-mainwindow-typeinfo.patch
+Patch6:         vym-0.10.0-xml-vym-typeinfo.patch
+Patch7:         vym-1.10.0-ornamentedobj-typeinfo.patch
 License: 	GPL
 Group: 		Office
 BuildRoot: 	%{_tmppath}/%{name}-buildroot
 Requires:	zip
-BuildRequires:	libqt-devel
+BuildRequires:	libqt4-devel libxext-devel desktop-file-utils
 
 %description
 VYM (View Your Mind) is a tool to generate and manipulate maps which
@@ -31,16 +39,38 @@ email by a simple mouse click.
 %prep
 %setup -q
 
-qmake -o Makefile vym.pro
+%patch0
+%patch1
+%patch2
+%patch3 -p0
+%patch4 -p0
+%patch5 -p0
+%patch6 -p0
+%patch7 -p0
 
 %build
+qmake DOCDIR="%{_docdir}/%{name}-%{version}" PREFIX=%{_prefix}
 %make
 
 %install
 rm -rf $RPM_BUILD_ROOT
-tar c scripts styles icons flags lang exports | tar x -C $RPM_BUILD_ROOT/%_datadir/%name
-mkdir docs; tar c demos | tar x -C ./docs/
-install vym $RPM_BUILD_ROOT/%_bindir/
+
+%{__make} install INSTALL_ROOT=%{buildroot} COPY="%{__cp} -p -f"
+
+%{__mkdir} -p %{buildroot}%{_datadir}/icons/hicolor/16x16/apps
+%{__cp} -p icons/%{name}-16x16.png %{buildroot}%{_datadir}/icons/hicolor/16x16/apps/%{name}.png
+%{__cp} -p icons/%{name}.xpm %{buildroot}%{_datadir}/icons/hicolor/16x16/apps/%{name}.xpm
+
+%{__mkdir} -p %{buildroot}%{_datadir}/icons/hicolor/128x128/apps
+%{__cp} -p icons/%{name}-128x128.png %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/%{name}.png
+
+%{__mkdir} -p %{buildroot}%{_datadir}/icons/hicolor/48x48/apps
+%{__cp} -p icons/%{name}.png %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/%{name}.png
+%{__cp} -p icons/%{name}-editor.png %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/%{name}-editor.png
+
+
+%{__mv} %{buildroot}%{_docdir}/%{name}-%{version}/ %{buildroot}%{_docdir}/%{name}/
+
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
 cat << EOF > $RPM_BUILD_ROOT%{_datadir}/applications/mandriva-%{name}.desktop
 [DESKTOP ENTRY]
@@ -49,9 +79,8 @@ StartupNotify=true
 Terminal=False
 Type=Application
 Exec=%{_bindir}/vym
-Categories=X-MandrivaLinux-Office-Graphs;Office;Chart;
+Categories=Office;Chart;
 EOF
-install -m 644 icons/%name.png $RPM_BUILD_ROOT%{_iconsdir}
 
 %post
 %{update_menus}
@@ -64,8 +93,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
-%doc doc demos docs/*
-%_datadir/%name
+%doc LICENSE.txt README.txt INSTALL.txt demos/* doc/*
+%_datadir/%name/
 %_bindir/%name
 %{_datadir}/applications/mandriva-%name.desktop
-%{_iconsdir}/%name.png
+%{_iconsdir}/hicolor/16x16/apps/%{name}*
+%{_iconsdir}/hicolor/48x48/apps/%{name}*
+%{_iconsdir}/hicolor/128x128/apps/%{name}.png
+
