@@ -1,5 +1,5 @@
 %define version 1.10.0
-%define release %mkrel 1
+%define release %mkrel 2
 
 Summary:	Tool to manage mind maps
 Name: 		vym
