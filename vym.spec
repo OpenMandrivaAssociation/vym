@@ -1,7 +1,7 @@
 %define version 1.10.0
 %define release %mkrel 1
 
-Summary:	View Your Mind is a tool to manage mind maps
+Summary:	Tool to manage mind maps
 Name: 		vym
 Version: 	%version
 Release: 	%release
