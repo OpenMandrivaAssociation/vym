@@ -1,5 +1,5 @@
-%define version 1.10.0
-%define release %mkrel 5
+%define version 1.12.2
+%define release %mkrel 0
 
 Summary:	Tool to manage mind maps
 Name: 		vym
@@ -38,15 +38,6 @@ email by a simple mouse click.
 
 %prep
 %setup -q
-
-%patch0
-%patch1
-%patch2
-%patch3 -p0
-%patch4 -p0
-%patch5 -p0
-%patch6 -p0
-%patch7 -p0
 
 %build
 qmake DOCDIR="%{_docdir}/%{name}-%{version}" PREFIX=%{_prefix}
