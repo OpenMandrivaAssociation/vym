@@ -1,5 +1,5 @@
 %define version 1.12.2
-%define release %mkrel 0
+%define release %mkrel 1
 
 Summary:	Tool to manage mind maps
 Name: 		vym
@@ -15,7 +15,7 @@ Patch4:         vym-0.10.0-selection-typeinfo.patch
 Patch5:         vym-0.10.0-mainwindow-typeinfo.patch
 Patch6:         vym-0.10.0-xml-vym-typeinfo.patch
 Patch7:         vym-1.10.0-ornamentedobj-typeinfo.patch
-License: 	GPL
+License: 	GPLv2
 Group: 		Office
 BuildRoot: 	%{_tmppath}/%{name}-buildroot
 Requires:	zip
@@ -64,11 +64,12 @@ rm -rf $RPM_BUILD_ROOT
 
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
 cat << EOF > $RPM_BUILD_ROOT%{_datadir}/applications/mandriva-%{name}.desktop
-[DESKTOP ENTRY]
+[Desktop Entry]
 Name=VYM
 StartupNotify=true
-Terminal=False
+Terminal=false
 Type=Application
+Icon=%{name}
 Exec=%{_bindir}/vym
 Categories=Office;Chart;
 EOF
