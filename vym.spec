@@ -1,25 +1,19 @@
-%define version 1.12.2
-%define release %mkrel 1
+%define Werror_cflags %nil
+
+%define version 1.12.8
+%define release 1
 
 Summary:	Tool to manage mind maps
 Name: 		vym
-Version: 	%version
-Release: 	%release
+Version: 	%{version}
+Release: 	%mkrel %{release}
 Source0: 	http://prdownloads.sourceforge.net/vym/%{name}-%{version}.tar.bz2
 URL: 		http://www.insilmaril.de/vym/
-Patch0:         vym-1.10.0-dir-vars.patch
-Patch1:         vym-1.10.0-docdir-searchList.patch
-Patch2:         vym-1.10.0-xdg-open.patch
-Patch3:         vym-0.10.0-editxlinkdialog-typeinfo.patch
-Patch4:         vym-0.10.0-selection-typeinfo.patch
-Patch5:         vym-0.10.0-mainwindow-typeinfo.patch
-Patch6:         vym-0.10.0-xml-vym-typeinfo.patch
-Patch7:         vym-1.10.0-ornamentedobj-typeinfo.patch
 License: 	GPLv2
 Group: 		Office
-BuildRoot: 	%{_tmppath}/%{name}-buildroot
 Requires:	zip
-BuildRequires:	libqt4-devel libxext-devel desktop-file-utils
+BuildRequires:	libqt4-devel
+BuildRequires:	libxext-devel
 
 %description
 VYM (View Your Mind) is a tool to generate and manipulate maps which
@@ -40,60 +34,62 @@ email by a simple mouse click.
 %setup -q
 
 %build
-qmake DOCDIR="%{_docdir}/%{name}-%{version}" PREFIX=%{_prefix}
+%qmake_qt4 -d PREFIX=%{_prefix}
+
+#really disable Werror flags
+sed -i -e 's|-Wformat -Werror=format-security||g' Makefile*
+
 %make
 
 %install
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
+make install INSTALL_ROOT=%{buildroot}
 
-%{__make} install INSTALL_ROOT=%{buildroot} COPY="%{__cp} -p -f"
+install -Dpm644 icons/%{name}-16x16.png %{buildroot}%{_datadir}/icons/hicolor/16x16/apps/%{name}.png
+install -Dpm644 icons/%{name}.xpm %{buildroot}%{_datadir}/icons/hicolor/16x16/apps/%{name}.xpm
 
-%{__mkdir} -p %{buildroot}%{_datadir}/icons/hicolor/16x16/apps
-%{__cp} -p icons/%{name}-16x16.png %{buildroot}%{_datadir}/icons/hicolor/16x16/apps/%{name}.png
-%{__cp} -p icons/%{name}.xpm %{buildroot}%{_datadir}/icons/hicolor/16x16/apps/%{name}.xpm
+install -Dpm644 icons/%{name}-128x128.png %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/%{name}.png
 
-%{__mkdir} -p %{buildroot}%{_datadir}/icons/hicolor/128x128/apps
-%{__cp} -p icons/%{name}-128x128.png %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/%{name}.png
+install -Dpm644 icons/%{name}.png %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/%{name}.png
+install -Dpm644 icons/%{name}-editor.png %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/%{name}-editor.png
 
-%{__mkdir} -p %{buildroot}%{_datadir}/icons/hicolor/48x48/apps
-%{__cp} -p icons/%{name}.png %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/%{name}.png
-%{__cp} -p icons/%{name}-editor.png %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/%{name}-editor.png
+#clean files and let files section handle docs
+rm -rf %{buildroot}%{_docdir}/packages
 
-
-%{__mv} %{buildroot}%{_docdir}/%{name}-%{version}/ %{buildroot}%{_docdir}/%{name}/
-
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
-cat << EOF > $RPM_BUILD_ROOT%{_datadir}/applications/mandriva-%{name}.desktop
+mkdir -p %{buildroot}%{_datadir}/applications
+cat << EOF > %{buildroot}%{_datadir}/applications/%{_real_vendor}-%{name}.desktop
 [Desktop Entry]
-Name=VYM
+Name=Vym
+Comment=View your mind
 StartupNotify=true
 Terminal=false
 Type=Application
 Icon=%{name}
-Exec=%{_bindir}/vym
-Categories=Office;Chart;
+Exec=%{name} %%f
+MimeType=application/x-vym;application/zip;
+Categories=KDE;Qt;Office;Chart;
 EOF
 
-%if %mdkversion < 200900
-%post
-%{update_menus}
-%endif
-
-%if %mdkversion < 200900
-%postun
-%{clean_menus}
-%endif
+mkdir -p %{buildroot}%{_datadir}/mime/packages/
+cat << EOF > %{buildroot}%{_datadir}/mime/packages/vym.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="application/x-vym">
+    <sub-class-of type="application/zip"/>
+    <comment>View Your Mind file</comment>
+    <glob pattern="*.vym"/>
+  </mime-type>
+</mime-info>
+EOF
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root)
-%doc LICENSE.txt README.txt INSTALL.txt demos/* doc/*
-%_datadir/%name/
-%_bindir/%name
-%{_datadir}/applications/mandriva-%name.desktop
-%{_iconsdir}/hicolor/16x16/apps/%{name}*
-%{_iconsdir}/hicolor/48x48/apps/%{name}*
-%{_iconsdir}/hicolor/128x128/apps/%{name}.png
-
+%doc LICENSE.txt README.txt doc/*
+%{_datadir}/%{name}
+%{_bindir}/%{name}
+%{_datadir}/applications/%{_real_vendor}-%{name}.desktop
+%{_datadir}/mime/packages/%{name}.xml
+%{_iconsdir}/hicolor/*/apps/*
