@@ -1,18 +1,15 @@
 %define Werror_cflags %nil
 
-%define version 1.12.8
-%define release 1
-
+Name:		vym
+Version:	2.0.6
+Release:	%mkrel 1
 Summary:	Tool to manage mind maps
-Name: 		vym
-Version: 	%{version}
-Release: 	%mkrel %{release}
-Source0: 	http://prdownloads.sourceforge.net/vym/%{name}-%{version}.tar.bz2
-URL: 		http://www.insilmaril.de/vym/
-License: 	GPLv2
-Group: 		Office
+Source0:	http://prdownloads.sourceforge.net/vym/%{name}-%{version}.tar
+URL:		http://www.insilmaril.de/vym/
+License:	GPLv2
+Group:		Office
 Requires:	zip
-BuildRequires:	libqt4-devel
+BuildRequires:	qt4-devel
 BuildRequires:	libxext-devel
 
 %description
@@ -37,27 +34,25 @@ email by a simple mouse click.
 %qmake_qt4 -d PREFIX=%{_prefix}
 
 #really disable Werror flags
-sed -i -e 's|-Wformat -Werror=format-security||g' Makefile*
+%__sed -i -e 's|-Wformat -Werror=format-security||g' Makefile*
 
 %make
 
 %install
-rm -rf %{buildroot}
-make install INSTALL_ROOT=%{buildroot}
+%__rm -rf %{buildroot}
+%__make install INSTALL_ROOT=%{buildroot}
 
-install -Dpm644 icons/%{name}-16x16.png %{buildroot}%{_datadir}/icons/hicolor/16x16/apps/%{name}.png
-install -Dpm644 icons/%{name}.xpm %{buildroot}%{_datadir}/icons/hicolor/16x16/apps/%{name}.xpm
-
-install -Dpm644 icons/%{name}-128x128.png %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/%{name}.png
-
-install -Dpm644 icons/%{name}.png %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/%{name}.png
-install -Dpm644 icons/%{name}-editor.png %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/%{name}-editor.png
+%__install -Dpm644 icons/%{name}-16x16.png %{buildroot}%{_datadir}/icons/hicolor/16x16/apps/%{name}.png
+%__install -Dpm644 icons/%{name}.xpm %{buildroot}%{_datadir}/icons/hicolor/16x16/apps/%{name}.xpm
+%__install -Dpm644 icons/%{name}-128x128.png %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/%{name}.png
+%__install -Dpm644 icons/%{name}.png %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/%{name}.png
+%__install -Dpm644 icons/%{name}-editor.png %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/%{name}-editor.png
 
 #clean files and let files section handle docs
-rm -rf %{buildroot}%{_docdir}/packages
+%__rm -rf %{buildroot}%{_docdir}/packages
 
-mkdir -p %{buildroot}%{_datadir}/applications
-cat << EOF > %{buildroot}%{_datadir}/applications/%{_real_vendor}-%{name}.desktop
+%__mkdir_p %{buildroot}%{_datadir}/applications
+%__cat << EOF > %{buildroot}%{_datadir}/applications/%{_real_vendor}-%{name}.desktop
 [Desktop Entry]
 Name=Vym
 Comment=View your mind
@@ -70,8 +65,8 @@ MimeType=application/x-vym;application/zip;
 Categories=KDE;Qt;Office;Chart;
 EOF
 
-mkdir -p %{buildroot}%{_datadir}/mime/packages/
-cat << EOF > %{buildroot}%{_datadir}/mime/packages/vym.xml
+%__mkdir_p %{buildroot}%{_datadir}/mime/packages/
+%__cat << EOF > %{buildroot}%{_datadir}/mime/packages/vym.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
   <mime-type type="application/x-vym">
@@ -82,8 +77,11 @@ cat << EOF > %{buildroot}%{_datadir}/mime/packages/vym.xml
 </mime-info>
 EOF
 
+# Remove it as it's OpenSUSE-based
+%__rm -rf %{buildroot}%{_datadir}/%{name}/scripts/bugger
+
 %clean
-rm -rf %{buildroot}
+%__rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root)
