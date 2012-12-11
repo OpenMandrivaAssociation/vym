@@ -1,16 +1,16 @@
 %define Werror_cflags %nil
 
 Name:		vym
-Version:	2.0.6
-Release:	%mkrel 1
+Version:	2.3.5
+Release:	1
 Summary:	Tool to manage mind maps
-Source0:	http://prdownloads.sourceforge.net/vym/%{name}-%{version}.tar
-URL:		http://www.insilmaril.de/vym/
 License:	GPLv2
 Group:		Office
+Source0:	http://prdownloads.sourceforge.net/vym/%{name}-%{version}.tar.bz2
+URL:		http://www.insilmaril.de/vym/
 Requires:	zip
 BuildRequires:	qt4-devel
-BuildRequires:	libxext-devel
+BuildRequires:	pkgconfig(xext)
 
 %description
 VYM (View Your Mind) is a tool to generate and manipulate maps which
@@ -39,7 +39,6 @@ email by a simple mouse click.
 %make
 
 %install
-%__rm -rf %{buildroot}
 %__make install INSTALL_ROOT=%{buildroot}
 
 %__install -Dpm644 icons/%{name}-16x16.png %{buildroot}%{_datadir}/icons/hicolor/16x16/apps/%{name}.png
@@ -52,7 +51,7 @@ email by a simple mouse click.
 %__rm -rf %{buildroot}%{_docdir}/packages
 
 %__mkdir_p %{buildroot}%{_datadir}/applications
-%__cat << EOF > %{buildroot}%{_datadir}/applications/%{_real_vendor}-%{name}.desktop
+%__cat << EOF > %{buildroot}%{_datadir}/applications/mandriva-%{name}.desktop
 [Desktop Entry]
 Name=Vym
 Comment=View your mind
@@ -80,14 +79,12 @@ EOF
 # Remove it as it's OpenSUSE-based
 %__rm -rf %{buildroot}%{_datadir}/%{name}/scripts/bugger
 
-%clean
-%__rm -rf %{buildroot}
-
 %files
-%defattr(-,root,root)
 %doc LICENSE.txt README.txt doc/*
 %{_datadir}/%{name}
 %{_bindir}/%{name}
-%{_datadir}/applications/%{_real_vendor}-%{name}.desktop
+%{_datadir}/applications/mandriva-%{name}.desktop
 %{_datadir}/mime/packages/%{name}.xml
 %{_iconsdir}/hicolor/*/apps/*
+
+
