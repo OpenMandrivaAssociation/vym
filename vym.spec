@@ -2,7 +2,7 @@
 
 Name:		vym
 Version:	2.3.5
-Release:	1
+Release:	2
 Summary:	Tool to manage mind maps
 License:	GPLv2
 Group:		Office
