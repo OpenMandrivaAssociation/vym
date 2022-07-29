@@ -43,7 +43,7 @@ email by a simple mouse click.
 %make_install -C build
 
 %files
-%doc LICENSE.txt README.txt doc/*
+%doc LICENSE* README* doc/*
 #{_datadir}/%{name}
 %{_bindir}/%{name}
 #{_datadir}/applications/mandriva-%{name}.desktop
