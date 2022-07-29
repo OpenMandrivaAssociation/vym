@@ -14,6 +14,7 @@ BuildRequires:	qt5-qtbase-devel
 BuildRequires:	pkgconfig(xext)
 BuildRequires:  pkgconfig(dbus-1)
 BuildRequires:  pkgconfig(Qt5Script)
+BuildRequires:  pkgconfig(Qt5Svg)
 
 %description
 VYM (View Your Mind) is a tool to generate and manipulate maps which
