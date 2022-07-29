@@ -1,15 +1,15 @@
 %define Werror_cflags %nil
 
 Name:		vym
-Version:	2.3.5
-Release:	2
+Version:	2.8.8
+Release:	1
 Summary:	Tool to manage mind maps
 License:	GPLv2
 Group:		Office
 Source0:	http://prdownloads.sourceforge.net/vym/%{name}-%{version}.tar.bz2
 URL:		http://www.insilmaril.de/vym/
 Requires:	zip
-BuildRequires:	qt4-devel
+BuildRequires:	qt5-qtbase-devel
 BuildRequires:	pkgconfig(xext)
 
 %description
@@ -31,53 +31,12 @@ email by a simple mouse click.
 %setup -q
 
 %build
-%qmake_qt4 -d PREFIX=%{_prefix}
+%cmake
 
-#really disable Werror flags
-%__sed -i -e 's|-Wformat -Werror=format-security||g' Makefile*
-
-%make
+%make_build
 
 %install
-%__make install INSTALL_ROOT=%{buildroot}
-
-%__install -Dpm644 icons/%{name}-16x16.png %{buildroot}%{_datadir}/icons/hicolor/16x16/apps/%{name}.png
-%__install -Dpm644 icons/%{name}.xpm %{buildroot}%{_datadir}/icons/hicolor/16x16/apps/%{name}.xpm
-%__install -Dpm644 icons/%{name}-128x128.png %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/%{name}.png
-%__install -Dpm644 icons/%{name}.png %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/%{name}.png
-%__install -Dpm644 icons/%{name}-editor.png %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/%{name}-editor.png
-
-#clean files and let files section handle docs
-%__rm -rf %{buildroot}%{_docdir}/packages
-
-%__mkdir_p %{buildroot}%{_datadir}/applications
-%__cat << EOF > %{buildroot}%{_datadir}/applications/mandriva-%{name}.desktop
-[Desktop Entry]
-Name=Vym
-Comment=View your mind
-StartupNotify=true
-Terminal=false
-Type=Application
-Icon=%{name}
-Exec=%{name} %%f
-MimeType=application/x-vym;application/zip;
-Categories=KDE;Qt;Office;Chart;
-EOF
-
-%__mkdir_p %{buildroot}%{_datadir}/mime/packages/
-%__cat << EOF > %{buildroot}%{_datadir}/mime/packages/vym.xml
-<?xml version="1.0" encoding="UTF-8"?>
-<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
-  <mime-type type="application/x-vym">
-    <sub-class-of type="application/zip"/>
-    <comment>View Your Mind file</comment>
-    <glob pattern="*.vym"/>
-  </mime-type>
-</mime-info>
-EOF
-
-# Remove it as it's OpenSUSE-based
-%__rm -rf %{buildroot}%{_datadir}/%{name}/scripts/bugger
+%make_install -C build
 
 %files
 %doc LICENSE.txt README.txt doc/*
