@@ -44,10 +44,10 @@ email by a simple mouse click.
 
 %files
 %doc LICENSE.txt README.txt doc/*
-%{_datadir}/%{name}
+#{_datadir}/%{name}
 %{_bindir}/%{name}
-%{_datadir}/applications/mandriva-%{name}.desktop
-%{_datadir}/mime/packages/%{name}.xml
-%{_iconsdir}/hicolor/*/apps/*
+#{_datadir}/applications/mandriva-%{name}.desktop
+#{_datadir}/mime/packages/%{name}.xml
+#{_iconsdir}/hicolor/*/apps/*
 
 
