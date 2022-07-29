@@ -9,8 +9,10 @@ Group:		Office
 Source0:	http://prdownloads.sourceforge.net/vym/%{name}-%{version}.tar.bz2
 URL:		http://www.insilmaril.de/vym/
 Requires:	zip
+BuildRequires:  cmake(Qt5LinguistTools)
 BuildRequires:	qt5-qtbase-devel
 BuildRequires:	pkgconfig(xext)
+BuildRequires:  pkgconfig(dbus-1)
 
 %description
 VYM (View Your Mind) is a tool to generate and manipulate maps which
