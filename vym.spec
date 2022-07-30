@@ -35,7 +35,7 @@ email by a simple mouse click.
 %setup -q
 
 %build
-%cmake
+%cmake -DCMAKE_INSTALL_DATAROOTDIR="share/vym"
 
 %make_build
 
