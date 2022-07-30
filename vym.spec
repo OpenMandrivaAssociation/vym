@@ -46,10 +46,7 @@ email by a simple mouse click.
 
 %files
 %doc LICENSE* README* doc/*
-#{_datadir}/%{name}
 %{_bindir}/%{name}
-#{_datadir}/applications/mandriva-%{name}.desktop
-#{_datadir}/mime/packages/%{name}.xml
-#{_iconsdir}/hicolor/*/apps/*
+%{_datadir}/%{name}
 
 
