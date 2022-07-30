@@ -1,0 +1,12 @@
+diff -uraN vym-2.8.8/CMakeLists.txt omv-vym-2.8.8/CMakeLists.txt
+--- vym-2.8.8/CMakeLists.txt	2021-06-16 18:05:40.456413069 +0200
++++ omv-vym-2.8.8/CMakeLists.txt	2022-07-30 17:41:02.821980743 +0200
+@@ -197,7 +197,7 @@
+ QT5_ADD_TRANSLATION(VymTranslations ${VymTranslationSources})
+ 
+ IF(NOT DATADIR)
+-    SET(DATADIR "${CMAKE_INSTALL_PREFIX}/vym")
++    SET(DATADIR "${CMAKE_INSTALL_PREFIX}/share/vym")
+ ENDIF()
+ 
+ ADD_COMPILE_DEFINITIONS(VYMBASEDIR="${DATADIR}")
