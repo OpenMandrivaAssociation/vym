@@ -7,6 +7,7 @@ Summary:	Tool to manage mind maps
 License:	GPLv2
 Group:		Office
 Source0:	http://prdownloads.sourceforge.net/vym/%{name}-%{version}.tar.bz2
+Patch0:   fix-install-dir.patch
 URL:		http://www.insilmaril.de/vym/
 Requires:	zip
 BuildRequires:  cmake(Qt5LinguistTools)
@@ -33,6 +34,7 @@ email by a simple mouse click.
 
 %prep
 %setup -q
+%autopatch -p1
 
 %build
 %cmake -DCMAKE_INSTALL_DATAROOTDIR="share/vym"
