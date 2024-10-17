@@ -8,7 +8,7 @@ License:	GPLv2
 Group:		Office
 Source0:	http://prdownloads.sourceforge.net/vym/%{name}-%{version}.tar.bz2
 Patch0:   fix-install-dir.patch
-URL:		http://www.insilmaril.de/vym/
+URL:		https://www.insilmaril.de/vym/
 Requires:	zip
 BuildRequires:  cmake(Qt5LinguistTools)
 BuildRequires:	qt5-qtbase-devel
